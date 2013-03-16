@@ -23,7 +23,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
- 
+
+function wh_check_wholesaler_stock () {
         	$curlurl = get_post_meta($this->id, 'curlurl', true);
     		$curlpattern = get_post_meta($this->id, 'curlpattern', true);
         	$curlpatterntwo = get_post_meta($this->id, 'curlpatterntwo', true);
@@ -72,5 +73,7 @@
 			   { return false; 
 			   	update_post_meta( $this->id, '_stock_status', 'outofstock' );
 			   }
- 
+}
+add_action( 'woocommerce_product_set_stock_status', 'wh_check_wholesaler_stock' );
+
 ?>
