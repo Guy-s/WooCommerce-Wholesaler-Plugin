@@ -24,10 +24,9 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
- /*
-        $curlurl = get_post_meta($this->id, 'curlurl', true);
+        	$curlurl = get_post_meta($this->id, 'curlurl', true);
     		$curlpattern = get_post_meta($this->id, 'curlpattern', true);
-        $curlpatterntwo = get_post_meta($this->id, 'curlpatterntwo', true);
+        	$curlpatterntwo = get_post_meta($this->id, 'curlpatterntwo', true);
     		$curlpatternthree = get_post_meta($this->id, 'curlpatternthree', true);  
     		$curltimestamp = get_post_meta($this->id, 'curltimestamp', true);
     		$curlresult = get_post_meta($this->id, 'curlresult', true);
@@ -58,13 +57,20 @@
 			$curlsubject = $curlhtml;
 			update_post_meta($this->id, 'curlresult', $curlhtml);
 			if (preg_match($curlpattern, $curlsubject))
-			   { return true; }
+			   { return true; 
+				update_post_meta( $this->id, '_stock_status', 'instock' );
+			   }
 			elseif ((preg_match($curlpatterntwo, $curlsubject)))
-			   { return true; }
+			   { return true; 
+			   	update_post_meta( $this->id, '_stock_status', 'instock' );
+			   }
 			elseif ((preg_match($curlpatternthree, $curlsubject)))
-			   { return true; }
+			   { return true; 
+			   	update_post_meta( $this->id, '_stock_status', 'instock' );
+			   }
 			else
-			   { return false; }
-*/
+			   { return false; 
+			   	update_post_meta( $this->id, '_stock_status', 'outofstock' );
+			   }
  
 ?>
