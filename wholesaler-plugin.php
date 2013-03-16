@@ -23,6 +23,8 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
+ 
+global $post;
 
 function wh_check_wholesaler_stock () {
         	$curlurl = get_post_meta($this->id, 'curlurl', true);
