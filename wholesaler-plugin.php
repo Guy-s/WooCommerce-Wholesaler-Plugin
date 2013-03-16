@@ -24,32 +24,35 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
-global $post;
+
+
 
 function wh_check_wholesaler_stock () {
-        	$curlurl = get_post_meta($this->id, 'curlurl', true);
-    		$curlpattern = get_post_meta($this->id, 'curlpattern', true);
-        	$curlpatterntwo = get_post_meta($this->id, 'curlpatterntwo', true);
-    		$curlpatternthree = get_post_meta($this->id, 'curlpatternthree', true);  
-    		$curltimestamp = get_post_meta($this->id, 'curltimestamp', true);
-    		$curlresult = get_post_meta($this->id, 'curlresult', true);
+	 	global $post, $woocommerce, $product, $woocommerce_loop, $wpdb;
+
+        	$curlurl = get_post_meta($post->ID, 'curlurl', true);
+    		$curlpattern = get_post_meta($post->ID, 'curlpattern', true);
+        	$curlpatterntwo = get_post_meta($post->ID, 'curlpatterntwo', true);
+    		$curlpatternthree = get_post_meta($post->ID, 'curlpatternthree', true);  
+    		$curltimestamp = get_post_meta($post->ID, 'curltimestamp', true);
+    		$curlresult = get_post_meta($post->ID, 'curlresult', true);
 
 
 		if (!empty($curlurl) && !empty($curlpattern))
 		{
 			if ((time() - $curltimestamp) < 3600) 
 				{      
-				if ((preg_match($curlpattern, $curlresult)))
-				{ return true; }
-				elseif ((preg_match($curlpatterntwo, $curlresult)))
-				{ return true; }
-				elseif ((preg_match($curlpatternthree, $curlresult)))
-				 { return true; }
+				if (preg_match('/' . $curlpattern . '/', $curlresult))
+				{  update_post_meta($post->ID, '_stock_status', 'instock'); }
+				elseif (preg_match('/' . $curlpatterntwo . '/', $curlresult))
+				{  update_post_meta($post->ID, '_stock_status', 'instock'); }
+				elseif (preg_match('/' . $curlpatternthree . '/', $curlresult))
+				 {  update_post_meta($post->ID, '_stock_status', 'instock'); }
 				 else
-				{ return false; }
+				{ update_post_meta($post->ID, '_stock_status', 'outofstock'); }
 				} else {
 			$newcurltime = time();
-			update_post_meta($this->id, 'curltimestamp', $newcurltime);
+			update_post_meta($post->ID, 'curltimestamp', $newcurltime);
                 	$ch = curl_init();
                 	curl_setopt($ch, CURLOPT_URL, $curlurl);
                 	curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -58,24 +61,23 @@ function wh_check_wholesaler_stock () {
                 	$curlhtml = curl_exec($ch);
                 	curl_close($ch);
 			$curlsubject = $curlhtml;
-			update_post_meta($this->id, 'curlresult', $curlhtml);
-			if (preg_match($curlpattern, $curlsubject))
-			   { return true; 
-				update_post_meta( $this->id, '_stock_status', 'instock' );
+			update_post_meta($post->ID, 'curlresult', $curlhtml);
+			if (preg_match('/' . $curlpattern . '/', $curlsubject))
+			   { update_post_meta($post->ID, '_stock_status', 'instock' );
 			   }
-			elseif ((preg_match($curlpatterntwo, $curlsubject)))
-			   { return true; 
-			   	update_post_meta( $this->id, '_stock_status', 'instock' );
+			elseif (preg_match('/' . $curlpatterntwo . '/', $curlsubject))
+			   { update_post_meta($post->ID, '_stock_status', 'instock' );
 			   }
-			elseif ((preg_match($curlpatternthree, $curlsubject)))
-			   { return true; 
-			   	update_post_meta( $this->id, '_stock_status', 'instock' );
+			elseif (preg_match('/' . $curlpatternthree . '/', $curlsubject))
+			   { update_post_meta($post->ID, '_stock_status', 'instock' );
 			   }
 			else
-			   { return false; 
-			   	update_post_meta( $this->id, '_stock_status', 'outofstock' );
+			   { update_post_meta($post->ID, '_stock_status', 'outofstock' );
 			   }
-}
-add_action( 'woocommerce_product_set_stock_status', 'wh_check_wholesaler_stock' );
+			   }
+			   }
+			   }
+			   
+add_action( 'woocommerce_before_single_product', 'wh_check_wholesaler_stock' );
 
 ?>
