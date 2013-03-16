@@ -1,4 +1,4 @@
 WooCommerce-Wholesaler-Plugin
 =============================
 
-WooCommerce Plugin which checks wholesaler stocks in cases where wholesalers have no proper API.
+WooCommerce Plugin. It checks dropshipping wholesaler stocks in cases where the wholesaler has no proper API.
